@@ -1,0 +1,15 @@
+.root {
+  :global {
+    svg {
+      background-color: green;
+    }
+    .content {
+      .floatsvg {
+        background-color: skyblue;
+        float: left;
+        top: 50px;
+        left: 100px;
+      }
+    }
+  }
+}
