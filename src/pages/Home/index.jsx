@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import GridLayout from "react-grid-layout"
 import styles from "./index.module.scss"
 import ChartView from "./components/ChartView"
@@ -7,7 +7,16 @@ import { useSelector, useDispatch } from "react-redux"
 import GateCompontent from "./components/GateView/components/GateCompontent"
 import { dragSelAreSlice } from "@/store/drag"
 import NewChart from "./components/NewChart"
+import Scatter from "./components/Scatter"
+import Bar from "./components/Bar"
+import Candlestick from "./components/CandleStick"
+import Editor from "@monaco-editor/react"
+import { Button } from "antd"
+import { OutTable, ExcelRenderer } from "react-excel-renderer"
+
 export default function Home() {
+  const inputRef = useRef()
+
   const { isDragAre, top, left, width, height, jianx, jiany } = useSelector(
     (s) => s.dragSleAreData
   )
@@ -27,17 +36,68 @@ export default function Home() {
   )
   const layout = [
     { i: "menuBar", x: 0, y: 0, w: 24, h: 1, static: true },
-    { i: "axisTableX", x: 0, y: 1, w: 9, h: 3 },
-    { i: "axisTableY", x: 0, y: 4, w: 9, h: 3 },
-    { i: "dataTable", x: 0, y: 6, w: 9, h: 8 },
-    { i: "dataTable", x: 0, y: 6, w: 9, h: 8 },
-    { i: "chartView", x: 9, y: 1, w: 15, h: 20 },
-    { i: "newChart", x: 0, y: 14, w: 9, h: 9 },
+    { i: "newChart", x: 0, y: 1, w: 9, h: 6 },
+    { i: "axisTableX", x: 0, y: 8, w: 9, h: 6 },
+    { i: "axisTableY", x: 0, y: 8, w: 9, h: 6 },
+    { i: "dataTable", x: 0, y: 15, w: 9, h: 6 },
+    { i: "chartView", x: 9, y: 1, w: 15, h: 12 },
+    { i: "code", x: 9, y: 12, w: 15, h: 12 },
   ]
   const dragMouseUp = () => {
     dispatch(dragSelAreSlice.actions.closeDragSvg())
   }
-  console.log(isDragAre, 9977)
+  const [sett, setsett] = useState({
+    data: [
+      {
+        name: "Sheet1",
+        celldata: [
+          {
+            r: 0,
+            c: 0,
+            v: {
+              ct: { fa: "General", t: "g" },
+              m: "value2",
+              v: "value2",
+            },
+          },
+        ],
+      },
+    ],
+  })
+  const [newChartData, setNewChartData] = useState({
+    data: [
+      {
+        name: "Sheet1",
+        celldata: [
+          {
+            r: 0,
+            c: 0,
+            v: {
+              ct: { fa: "General", t: "g" },
+              m: "value5",
+              v: "value5",
+            },
+          },
+        ],
+      },
+    ],
+  })
+
+  const exportFile = () => {
+    inputRef.current.click()
+  }
+  const handleImport = (event) => {
+    const fileObj = event.target.files[0]
+    ExcelRenderer(fileObj, (err, resp) => {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log(fileObj, "fileObj")
+        console.log(resp, "resp")
+      }
+    })
+  }
+
   return (
     <div style={{ position: "relative" }} className={styles.root}>
       <GridLayout
@@ -47,33 +107,46 @@ export default function Home() {
         cols={nbCols}
         rowHeight={rowHeight}
         width={document.body.offsetWidth}
-        margin={[horizontalMargin, verticalMargin]}
+        // margin={[horizontalMargin, verticalMargin]}
         resizeHandles={["se"]}
         autoSize={false}
         compactType={null}
-        containerPadding={[0, 0]}
+        // containerPadding={[0, 0]}
       >
-        <div className="panelDragHandle" key="menuBar">
-          menuBar
-        </div>
-        <div className="panelDragHandle" key="axisTableX">
-          axisTableX
-        </div>
-        <div className="panelDragHandle" key="axisTableY">
-          axisTableY
-        </div>
-        <div className="panelDragHandle" key="dataTable">
-          dataTable
+        <div className="menuBar" key="menuBar">
+          Quantum finance
         </div>
         <div className="panelDragHandle" key="newChart">
-          <NewChart />
+          <Button onClick={exportFile}>导入文件</Button>
+          <input
+            style={{ display: "none" }}
+            ref={inputRef}
+            type="file"
+            accept=".xlsx,.xls,.csv"
+            onChange={handleImport}
+          />
+          <NewChart sett={sett} newChartData={sett} />
         </div>
-        <div key="chartView">
-          <div
-            style={{ width: 500, height: 50 }}
-            className="panelDragHandle"
-          ></div>
+        <div className="panelDragHandle" key="axisTableX">
+          <Scatter />
+        </div>
+        <div className="panelDragHandle" key="axisTableY">
+          <Bar />
+        </div>
+        <div className="panelDragHandle" key="dataTable">
+          <Candlestick />
+        </div>
+
+        <div className="chartView" key="chartView">
           <GateVew />
+        </div>
+        <div className="code" key="code">
+          <Editor
+            height="100%"
+            defaultLanguage="javascript"
+            defaultValue="// some comment"
+            theme="vs-dark"
+          />
         </div>
       </GridLayout>
       {isDragAre && (
