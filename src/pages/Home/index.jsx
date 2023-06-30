@@ -11,9 +11,9 @@ import Scatter from "./components/Scatter"
 import Bar from "./components/Bar"
 import Candlestick from "./components/CandleStick"
 import Editor from "@monaco-editor/react"
-import { Button } from "antd"
+import { Button, Upload } from "antd"
 import { OutTable, ExcelRenderer } from "react-excel-renderer"
-
+import * as XLSX from "xlsx"
 export default function Home() {
   const inputRef = useRef()
 
@@ -94,10 +94,53 @@ export default function Home() {
       } else {
         console.log(fileObj, "fileObj")
         console.log(resp, "resp")
+        const jsonData = JSON.stringify(resp)
+
+    const blob = new Blob([jsonData], { type: "application/json" })
+
+    const url = URL.createObjectURL(blob)
+
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "excel.json"
+    link.click()
       }
     })
   }
-
+  const [dataSource, setDataSource] = useState([])
+  const dataSourceToData = (arr) => {
+    let newArr = arr.map((item) => {
+      delete item.__EMPTY
+      return item
+    })
+    let data = [...newArr.map((item, index) => ({ ...item, key: index }))]
+    console.log(data, 33)
+  }
+  const importXLsx = (file) => {
+    // 创建一个file读取器
+    const fileReader = new FileReader()
+    // 文件读取完毕后的回调，
+    fileReader.onload = (e) => {
+      const workbook = XLSX.read(e.target.result, {
+        type: "binary",
+      })
+      const wsname = workbook.SheetNames[0]
+      const sheetJson = XLSX.utils.sheet_to_json(workbook.Sheets[wsname])
+      // console.log(JSON.stringify(sheetJson), "sheetJson")
+      // 将数据转换为Table组件所需格式
+      const ds = dataSourceToData(sheetJson)
+      setDataSource(ds)
+    }
+    // 以二进制字符串的形式读取本地文件
+    fileReader.readAsBinaryString(file)
+    // 阻止Upload组件的上传逻辑
+    return false
+  }
+  const UploadProps = {
+    accept: ".xlsx",
+    // 文件上传之前的回调
+    beforeUpload: importXLsx,
+  }
   return (
     <div style={{ position: "relative" }} className={styles.root}>
       <GridLayout
@@ -117,6 +160,9 @@ export default function Home() {
           Quantum finance
         </div>
         <div className="panelDragHandle" key="newChart">
+          {/* <Upload {...UploadProps}>
+            <Button>导入文件</Button>
+          </Upload> */}
           <Button onClick={exportFile}>导入文件</Button>
           <input
             style={{ display: "none" }}

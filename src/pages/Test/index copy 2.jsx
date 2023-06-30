@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react"
 import LuckyExcel from "luckyexcel"
 import { Button, message, Upload } from "antd"
-export default function NewChart() {
+export default function test() {
   const inputexcel = useRef()
   useEffect(() => {
     const luckysheet = window.luckysheet
@@ -23,7 +23,7 @@ export default function NewChart() {
     width: "100%",
     height: "100%",
     left: "0px",
-    top: "20px",
+    top: "50px",
   }
   const excelImport = () => {
     inputexcel.current.click()
@@ -34,6 +34,7 @@ export default function NewChart() {
       file,
       function (exportJson, luckysheetfile) {
         //Get the worksheet data after conversion
+        // console.log(exportJson, luckysheetfile)
         window.luckysheet.destroy()
         luckysheet.create({
           container: "luckysheet", // luckysheet is the container id

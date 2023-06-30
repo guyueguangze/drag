@@ -4,6 +4,7 @@ import Layout from "@/pages/Layout"
 const Home = lazy(() => import("@/pages/Home"))
 const Drag = lazy(() => import("@/pages/Drag"))
 const Test = lazy(() => import("@/pages/Test"))
+const GridLayout = lazy(() => import("@/pages/GridLayout"))
 
 export const userLayoutRouter = [
   {
@@ -15,7 +16,7 @@ export const userLayoutRouter = [
       },
       {
         path: "/home",
-        element: <Home />,
+        element: <GridLayout />,
       },
       {
         path: "/drag",
@@ -24,6 +25,10 @@ export const userLayoutRouter = [
       {
         path: "/test",
         element: <Test />,
+      },
+      {
+        path: "/GridLayout",
+        element: <GridLayout />,
       },
     ],
   },

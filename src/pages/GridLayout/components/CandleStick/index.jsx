@@ -85,7 +85,6 @@ export default function Test() {
       }
       result.push(+(sum / dayCount).toFixed(3))
     }
-    console.log(result)
     return result
   }
   useEffect(() => {
@@ -286,7 +285,7 @@ export default function Test() {
     ],
   }
   return (
-    <div style={{ width: 1000, height: 800 }} className="strok">
+    <div style={{ width: "100%", height: "100%" }} className="strok">
       <div className="aa">
         <Select
           defaultValue={selectStockData[0].value}
@@ -298,7 +297,7 @@ export default function Test() {
           options={selectStockData}
         />
       </div>
-      <div style={{ width: 1000, height: 750 }} ref={Candlestick}></div>
+      <div style={{ width: "100%", height: "100%" }} ref={Candlestick}></div>
     </div>
   )
 }
