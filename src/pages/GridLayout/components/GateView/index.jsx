@@ -19,6 +19,7 @@ export default function GateVew() {
     setSvgrect(svgrect)
   }, [])
   const { gateData } = useSelector((s) => s.gatesData)
+  const { isShwoDrag } = useSelector((s) => s.dragSleAreData)
 
   const [Boxselection, setBoxselection] = useState(null)
   const [BoxselectionCoordinate, setBoxselectionCoordinate] = useState(null)
@@ -103,9 +104,7 @@ export default function GateVew() {
       let top = e.clientY
 
       dispatch(dragSelAreSlice.actions.drag({ top, left }))
-
-      // let clickX = e.clientX - svgrect.left
-      // let clickY = e.clientY - svgrect.top
+      dispatch(dragSelAreSlice.actions.isShowDragView())
     }
     document.addEventListener("mousemove", drag)
   }

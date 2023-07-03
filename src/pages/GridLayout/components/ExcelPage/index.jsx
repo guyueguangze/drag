@@ -1,8 +1,14 @@
 import React, { useEffect, useRef } from "react"
 import LuckyExcel from "luckyexcel"
 import { Button, message, Upload } from "antd"
+import { useSelector, useDispatch } from "react-redux"
+import { dragSelAreSlice } from "@/store/drag"
 export default function ExcelPage({ excelData }) {
   const inputexcel = useRef()
+  const { isUpdateExcel } = useSelector((s) => s.dragSleAreData)
+  const { selGateData } = useSelector((s) => s.gatesData)
+  const dispatch = useDispatch()
+
   useEffect(() => {
     const luckysheet = window.luckysheet
     const options = {
@@ -42,6 +48,48 @@ export default function ExcelPage({ excelData }) {
       )
     }
   }, [excelData])
+  useEffect(() => {
+    if (isUpdateExcel) {
+      // dispatch(dragSelAreSlice.actions.updateExcel(true))
+      console.log(selGateData)
+      let excelGateData = []
+      for (let index = 0; index < selGateData.length; index++) {
+        excelGateData.push([
+          {
+            m: selGateData[index].name,
+            ct: {
+              fa: "General",
+              t: "g",
+            },
+            v: selGateData[index].name,
+          },
+          {
+            m: selGateData[index].x,
+            ct: {
+              fa: "General",
+              t: "g",
+            },
+            v: selGateData[index].x,
+          },
+          {
+            m: selGateData[index].y,
+            ct: {
+              fa: "General",
+              t: "g",
+            },
+            v: selGateData[index].y,
+          },
+        ])
+      }
+      // console.log(selGateData.length)
+      // console.log(excelGateData, 88)
+      luckysheet.setRangeValue(excelGateData, {
+        range: `A1:C${selGateData.length}`,
+      })
+
+      dispatch(dragSelAreSlice.actions.updateExcel(false))
+    }
+  }, [isUpdateExcel])
   const luckyCss = {
     margin: "0px",
     padding: "0px",
@@ -108,6 +156,24 @@ export default function ExcelPage({ excelData }) {
           },
           v: "value2",
         },
+        // {
+        //   m: "5",
+        //   ct: {
+        //     fa: "General",
+        //     t: "g",
+        //   },
+        //   v: "5",
+        // },
+      ],
+      [
+        {
+          m: "value2",
+          ct: {
+            fa: "General",
+            t: "g",
+          },
+          v: "value2",
+        },
         {
           m: "value4",
           ct: {
@@ -118,8 +184,9 @@ export default function ExcelPage({ excelData }) {
         },
       ],
     ]
-    luckysheet.setRangeValue(data, { range: "A1:B2" })
+    luckysheet.setRangeValue(data, { range: "A1:B3" })
   }
+
   return (
     <div className="ecxel">
       <Button onClick={onClick}></Button>

@@ -15,13 +15,30 @@ import { dragSelAreSlice } from "@/store/drag"
 
 export default function GridLayoutPage() {
   const inputexcel = useRef()
-  const { isDragAre, top, left, width, height, jianx, jiany } = useSelector(
-    (s) => s.dragSleAreData
-  )
+  const { isDragAre, isShwoDrag, top, left, width, height, jianx, jiany } =
+    useSelector((s) => s.dragSleAreData)
   const { selGateData } = useSelector((s) => s.gatesData)
   const dispatch = useDispatch()
-  const dragMouseUp = () => {
+  const dragMouseUp = (e) => {
     dispatch(dragSelAreSlice.actions.closeDragSvg())
+
+    let mouseX = e.clientX // 鼠标相对于窗口的X坐标
+    let mouseY = e.clientY // 鼠标相对于窗口的Y坐标
+    let luckysheet = document.getElementById("luckysheet")
+    let luckysheetRect = luckysheet.getBoundingClientRect() // 获取元素的边界框信息
+    let luckysheetLeft = luckysheetRect.left // 元素左边界的X坐标
+    let luckysheetTop = luckysheetRect.top // 元素上边界的Y坐标
+    let luckysheetRight = luckysheetRect.right // 元素右边界的X坐标
+    let luckysheetBottom = luckysheetRect.bottom // 元素下边界的Y坐标
+    if (
+      mouseX >= luckysheetLeft &&
+      mouseX <= luckysheetRight &&
+      mouseY >= luckysheetTop &&
+      mouseY <= luckysheetBottom
+    ) {
+      // console.log("鼠标在元素内")
+      dispatch(dragSelAreSlice.actions.updateExcel(true))
+    }
   }
   const nbRows = 24
   const nbCols = 24
@@ -115,7 +132,7 @@ export default function GridLayoutPage() {
           <GateVew />
         </div>
         <div key="editor" className="panel panelDragHandle">
-          <Editor theme="vs-dark" />
+          <Editor defaultValue="// Code editing" />
         </div>
         <div
           onMouseUp={excelOnMouseUp}
@@ -139,7 +156,7 @@ export default function GridLayoutPage() {
           <LineStack></LineStack>
         </div>
       </GridLayout>
-      {isDragAre && (
+      {isDragAre && isShwoDrag && (
         <svg
           onMouseUp={dragMouseUp}
           width={width}
