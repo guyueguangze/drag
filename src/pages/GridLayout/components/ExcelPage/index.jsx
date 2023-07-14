@@ -51,7 +51,6 @@ export default function ExcelPage({ excelData }) {
   useEffect(() => {
     if (isUpdateExcel) {
       // dispatch(dragSelAreSlice.actions.updateExcel(true))
-      console.log(selGateData)
       let excelGateData = []
       for (let index = 0; index < selGateData.length; index++) {
         excelGateData.push([
@@ -189,7 +188,7 @@ export default function ExcelPage({ excelData }) {
 
   return (
     <div className="ecxel">
-      <Button onClick={onClick}></Button>
+      {/* <Button onClick={onClick}></Button> */}
       {/* <input
         ref={inputexcel}
         onChange={handleFileUpload}
