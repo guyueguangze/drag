@@ -96,7 +96,7 @@ export default function ExcelPage({ excelData }) {
     width: "100%",
     height: "100%",
     left: "0px",
-    top: "20px",
+    top: "0px",
   }
   const excelImport = () => {
     inputexcel.current.click()

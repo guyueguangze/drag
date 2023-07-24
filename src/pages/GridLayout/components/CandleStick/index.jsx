@@ -1,8 +1,12 @@
 import React, { useRef, useEffect, useState } from "react"
 import dayjs from "dayjs"
 import * as echarts from "echarts"
-import { Select } from "antd"
+import { Select, Button, Space, Modal, Input, Table, Form } from "antd"
 import { stoctData } from "@/pages/Home/excel"
+import { v4 as uuidv4 } from "uuid"
+import SelfSockModal from "./components/SelfSockModal"
+let selfStockList = []
+
 export default function Test() {
   const Candlestick = useRef()
   const stoctDate = []
@@ -284,20 +288,121 @@ export default function Test() {
       },
     ],
   }
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selfStock, setSelfStock] = useState([])
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
+  const handleOk = () => {
+    // setIsModalOpen(false)
+    closeModal()
+  }
+  const handleCancel = () => {
+    // setIsModalOpen(false)
+    closeModal()
+  }
+  const columns = [
+    {
+      title: "name",
+      dataIndex: "name",
+      key: "name",
+      render: (text) => <a>{selectStockData[text].label}</a>,
+    },
+    {
+      title: "amount",
+      dataIndex: "amount",
+      key: "amount",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "price",
+      dataIndex: "price",
+      key: "price",
+      render: (text) => <a>{text}</a>,
+    },
+  ]
+  const onFinish = (values) => {
+    values.key = uuidv4()
+    selfStockList.push(values)
+    console.log(selfStockList)
+    setSelfStock(selfStockList)
+    // console.log(555)
+    // console.log(values, 555)
+  }
   return (
     <div style={{ width: "100%", height: "100%" }} className="strok">
-      <div className="aa">
-        <Select
-          defaultValue={selectStockData[0].value}
-          title="选择股票"
-          style={{
-            width: 120,
-          }}
-          onChange={selectStock}
-          options={selectStockData}
-        />
+      <div
+        // style={{
+        //   width: "calc(100% - 80px)",
+        //   height: "100%",
+        //   display: "inline-block",
+        // }}
+        className="Candlestick"
+        ref={Candlestick}
+      ></div>
+      <div
+        className="handle"
+        // style={{ width: "30%", height: "100%", display: "inline-block" }}
+      >
+        <Space direction="vertical">
+          <Form
+            initialValues={{
+              name: selectStockData[0].value,
+              amount: 0,
+              price: 0,
+            }}
+            autoComplete="off"
+            onFinish={onFinish}
+          >
+            <Form.Item style={{ marginBottom: "10px" }} name="name">
+              <Select
+                // defaultValue={selectStockData[0].value}
+                title="选择股票"
+                style={{
+                  width: 120,
+                }}
+                onChange={selectStock}
+                options={selectStockData}
+              />
+            </Form.Item>
+            <Form.Item style={{ marginBottom: "10px" }} name="amount">
+              <Input addonBefore="-" addonAfter="+" placeholder="价格" />
+            </Form.Item>
+            <Form.Item style={{ marginBottom: "10px" }} name="price">
+              <Input addonBefore="-" addonAfter="+" placeholder="份数" />
+            </Form.Item>
+            <Form.Item style={{ marginBottom: "10px" }}>
+              <Button htmlType="submit" type="primary">
+                加入自选
+              </Button>
+            </Form.Item>
+            <Form.Item style={{ marginBottom: "0px" }}>
+              <Button onClick={() => setIsModalOpen(true)} type="primary">
+                查看自选
+              </Button>
+            </Form.Item>
+          </Form>
+        </Space>
       </div>
-      <div style={{ width: "100%", height: "100%" }} ref={Candlestick}></div>
+      {/* <SelfSockModal
+        closeModal={closeModal}
+        selfStock={selfStock}
+        isModalOpen={isModalOpen}
+        columns={columns}
+      ></SelfSockModal> */}
+      <Modal
+        destroyOnClose={true}
+        title="我的股票"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Table
+          // rowKey={uuidv4()}
+          dataSource={selfStock}
+          columns={columns}
+        ></Table>
+      </Modal>
     </div>
   )
 }

@@ -146,13 +146,13 @@ export default function GridLayoutPage() {
         <div key="Candlestick" className="panel panelDragHandle">
           <Candlestick />
         </div>
-        <div key="bar" className="panel scrollY panelDragHandle">
+        <div key="bar" className="panel scrollY">
           <Bar></Bar>
         </div>
         <div key="Scatter" className="panel scrollY panelDragHandle">
           <Scatter></Scatter>
         </div>
-        <div key="LineStack" className="panel scrollY panelDragHandle">
+        <div key="LineStack" className="panel scrollY">
           <LineStack></LineStack>
         </div>
       </GridLayout>

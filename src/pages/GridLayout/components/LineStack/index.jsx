@@ -73,11 +73,15 @@ export default function LineStack() {
     myChart.setOption(option)
   }, [])
 
+  const onClick = () => {
+    console.log(555)
+  }
   return (
     <div
       style={{ width: "100%", height: "100%" }}
       ref={linestack}
       className="linestack"
+      onClick={onClick}
     ></div>
   )
 }

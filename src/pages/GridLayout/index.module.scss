@@ -16,5 +16,17 @@
       border: 1px solid rgb(186, 186, 192);
       overflow: auto;
     }
+    .luckysheet_info_detail {
+      display: none !important;
+    }
+    .strok {
+      display: flex;
+      .Candlestick {
+        flex: 7;
+      }
+      .handle {
+        flex: 3;
+      }
+    }
   }
 }
