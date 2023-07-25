@@ -10,6 +10,7 @@ import Scatter from "./components/Scatter"
 import GateVew from "./components/GateView"
 import LineStack from "./components/LineStack"
 import GateCompontent from "./components/GateView/components/GateCompontent"
+import QuantumCircuit from "./components/QuantumCircuit"
 import { useSelector, useDispatch } from "react-redux"
 import { dragSelAreSlice } from "@/store/drag"
 
@@ -120,16 +121,24 @@ export default function GridLayoutPage() {
           </span>
         </div>
 
-        <div key="gateView" className="panel ">
+        <div
+          key="gateView"
+          style={{
+            overflow: "auto",
+            // height: 600,
+            // width: "100%",
+          }}
+          className="panel "
+        >
           <div
             style={{
               width: "100%",
               height: 30,
-              backgroundColor: "rgb(186, 186, 192)",
+              // backgroundColor: "rgb(186, 186, 192)",
             }}
             className="dragDiv panelDragHandle"
           ></div>
-          <GateVew />
+          <QuantumCircuit />
         </div>
         <div key="editor" className="panel panelDragHandle">
           <Editor defaultValue="// Code editing" />

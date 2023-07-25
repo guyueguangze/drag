@@ -1,0 +1,41 @@
+.root {
+  background-color: #fff;
+  height: 100%;
+  border-left: 1px solid rgb(222, 225, 230);
+  :global {
+    .dragGate {
+      width: 100%;
+      height: 80px;
+      border: 1px solid rgb(222, 225, 230);
+    }
+    .drag_content {
+      // 滚动条样式
+
+      display: flex;
+      .jsonCircuitData {
+        height: 100%;
+        width: 300px;
+        display: inline-block;
+        border: 1px solid rgb(222, 225, 230);
+        margin: 10px;
+      }
+      .svg_content_f {
+        .operationCircuit {
+          width: 100%;
+          height: 60px;
+          padding: 15px;
+          margin-left: 10px;
+          border: 1px solid rgb(222, 225, 230);
+        }
+        .svg_content {
+          width: 100%;
+          border: 1px solid rgb(222, 225, 230);
+          margin: 10px;
+        }
+      }
+    }
+    .showArry {
+      border: 1px solid rgb(222, 225, 230);
+    }
+  }
+}

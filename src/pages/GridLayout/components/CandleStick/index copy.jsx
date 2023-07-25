@@ -100,10 +100,8 @@ export default function Test() {
     }
     myChart.setOption(option)
   }, [showStock])
-  const [stockName, setStockName] = useState(stoctData.stoctName[0])
   const selectStock = (value) => {
     setShowStock(realStoctLine[value])
-    setStockName(stoctData.stoctName[value])
   }
   const option = {
     title: {
@@ -306,84 +304,115 @@ export default function Test() {
   }
   const columns = [
     {
-      title: "股票",
+      title: "name",
       dataIndex: "name",
       key: "name",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a>{selectStockData[text].label}</a>,
     },
     {
-      title: "份数",
+      title: "amount",
       dataIndex: "amount",
       key: "amount",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "价格",
+      title: "price",
       dataIndex: "price",
       key: "price",
       render: (text) => <a>{text}</a>,
     },
   ]
+  const onFinish = (values) => {
+    values.key = uuidv4()
+    selfStockList.push(values)
+    console.log(selfStockList)
+    setSelfStock(selfStockList)
+    // console.log(555)
+    // console.log(values, 555)
+  }
+  const [form] = Form.useForm()
 
+  // const price = useRef()
+  // const amount = useRef()
   const [price, setPrice] = useState(10)
   const [amount, setAmount] = useState(10)
-  const addSelfSotck = () => {
-    const data = {
-      price,
-      amount,
-      key: uuidv4(),
-      name: stockName,
-    }
-    selfStockList.push(data)
-    setSelfStock(selfStockList)
-  }
   const HandleDowmPrice = () => {
     setPrice(price - 1)
+    console.log(price, "88")
   }
   const HandleUpPrice = () => {
-    setPrice(price + 1)
+    // setPrice(price + 1)
   }
   const HandleUpAmount = () => {
-    setAmount(amount + 1)
+    // setAmount(amount + 1)
   }
   const HandleDowmAmount = () => {
-    setAmount(amount - 1)
+    // setAmount(amount - 1)
   }
   return (
     <div style={{ width: "100%", height: "100%" }} className="strok">
-      <div className="Candlestick" ref={Candlestick}></div>
+      <div
+        // style={{
+        //   width: "calc(100% - 80px)",
+        //   height: "100%",
+        //   display: "inline-block",
+        // }}
+        className="Candlestick"
+        ref={Candlestick}
+      ></div>
       <div
         className="handle"
         // style={{ width: "30%", height: "100%", display: "inline-block" }}
       >
         <Space direction="vertical">
-          <Select
-            defaultValue={selectStockData[0].value}
-            title="选择股票"
-            style={{
-              width: 120,
+          <Form
+            form={form}
+            initialValues={{
+              name: selectStockData[0].value,
+              // amount: amount,
+              // price: amount,
             }}
-            onChange={selectStock}
-            options={selectStockData}
-          />
-          <Input
-            value={price}
-            addonBefore={<a onClick={HandleDowmPrice}>-</a>}
-            addonAfter={<a onClick={HandleUpPrice}>+</a>}
-            placeholder="价格"
-          />
-          <Input
-            value={amount}
-            addonBefore={<a onClick={HandleDowmAmount}>-</a>}
-            addonAfter={<a onClick={HandleUpAmount}>+</a>}
-            placeholder="份数"
-          />
-          <Button onClick={addSelfSotck} type="primary">
-            加入自选
-          </Button>
-          <Button onClick={() => setIsModalOpen(true)} type="primary">
-            查看自选
-          </Button>
+            autoComplete="off"
+            onFinish={onFinish}
+          >
+            <Form.Item style={{ marginBottom: "10px" }} name="name">
+              <Select
+                // defaultValue={selectStockData[0].value}
+                title="选择股票"
+                style={{
+                  width: 120,
+                }}
+                onChange={selectStock}
+                options={selectStockData}
+              />
+            </Form.Item>
+            <Form.Item name="price">
+              <Input
+                value={price}
+                addonBefore={<a onClick={HandleDowmPrice}>-</a>}
+                addonAfter={<a onClick={HandleUpPrice}>+</a>}
+                placeholder="价格"
+              />
+            </Form.Item>
+            <Form.Item style={{ marginBottom: "10px" }} name="price">
+              <Input
+                value={amount}
+                addonBefore={<a onClick={HandleUpAmount}>-</a>}
+                addonAfter={<a onClick={HandleDowmAmount}>+</a>}
+                placeholder="份数"
+              />
+            </Form.Item>
+            <Form.Item style={{ marginBottom: "10px" }}>
+              <Button htmlType="submit" type="primary">
+                加入自选
+              </Button>
+            </Form.Item>
+            <Form.Item style={{ marginBottom: "0px" }}>
+              <Button onClick={() => setIsModalOpen(true)} type="primary">
+                查看自选
+              </Button>
+            </Form.Item>
+          </Form>
         </Space>
       </div>
       {/* <SelfSockModal

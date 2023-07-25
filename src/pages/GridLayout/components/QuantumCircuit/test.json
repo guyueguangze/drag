@@ -1,0 +1,28 @@
+[
+  [
+    { "name": "cz", "qubit": [3, 4] },
+    { "name": "cz", "qubit": [5, 6] },
+    { "name": "i", "qubit": [7] },
+    { "name": "pvz", "qubit": [0] }
+  ],
+  [
+    { "name": "cz", "qubit": [3, 4] },
+    { "name": "vz", "qubit": [7] }
+  ],
+  [
+    { "name": "cz", "qubit": [3, 4] },
+    { "name": "y", "qubit": [7] }
+  ],
+  [
+    { "name": "cz", "qubit": [3, 4] },
+    { "name": "u3", "qubit": [7] }
+  ],
+  [
+    { "name": "pvz", "qubit": [1] },
+    { "name": "pvz", "qubit": [2] },
+    { "name": "pvz", "qubit": [3] },
+    { "name": "pvz", "qubit": [4] },
+    { "name": "pvz", "qubit": [5] },
+    { "name": "pvz", "qubit": [6] }
+  ]
+]
